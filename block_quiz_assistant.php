@@ -287,20 +287,27 @@ class block_quiz_assistant extends block_base {
         $input = html_writer::empty_tag('input', [
             'type' => 'password',
             'id' => $id,
-            'class' => 'form-control font-monospace',
+            'class' => 'form-control form-control-sm font-monospace',
+            'style' => 'max-width: 180px; user-select: none; -webkit-user-select: none;',
             'value' => $password,
             'readonly' => 'readonly',
+            'oncopy' => 'return false;',
+            'oncut' => 'return false;',
+            'onpaste' => 'return false;',
+            'onselectstart' => 'return false;',
+            'oncontextmenu' => 'return false;',
+            'ondragstart' => 'return false;',
             'aria-label' => get_string('password', 'block_quiz_assistant'),
         ]);
 
         $button = html_writer::tag('button', s($showstr), [
             'type' => 'button',
-            'class' => 'btn btn-outline-secondary',
+            'class' => 'btn btn-outline-secondary btn-sm',
             'onclick' => "var input=document.getElementById('" . s($id) . "');" .
                 "if(input.type==='password'){input.type='text';this.innerText='" . s($hidestr) . "';}" .
                 "else{input.type='password';this.innerText='" . s($showstr) . "';}",
         ]);
 
-        return html_writer::div($input . $button, 'input-group mb-2');
+        return html_writer::div($input . $button, 'input-group input-group-sm mb-2');
     }
 }
