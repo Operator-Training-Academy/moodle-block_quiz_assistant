@@ -24,8 +24,6 @@
 
 use mod_quiz\quiz_settings;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Course quiz details block.
  *

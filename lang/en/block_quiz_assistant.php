@@ -23,10 +23,7 @@
  */
 
 $string['pluginname'] = 'Quiz assistant';
-$string['quiz_assistant:addinstance'] = 'Add a Quiz assistant block';
-$string['quiz_assistant:edit'] = 'Edit a Quiz assistant block';
 $string['accessrules'] = 'Additional access rules';
-$string['quiz_assistant:view'] = 'View quiz assistant information';
 $string['attempts'] = 'Attempts allowed';
 $string['defaultpassword'] = 'Quiz password';
 $string['gradepass'] = 'Grade required to pass';
@@ -38,6 +35,9 @@ $string['overrides'] = 'Password overrides';
 $string['password'] = 'Password';
 $string['privacy:metadata'] = 'The Quiz assistant block does not store any personal data.';
 $string['questions'] = 'Questions';
+$string['quiz_assistant:addinstance'] = 'Add a Quiz assistant block';
+$string['quiz_assistant:edit'] = 'Edit a Quiz assistant block';
+$string['quiz_assistant:view'] = 'View quiz assistant information';
 $string['timelimit'] = 'Time limit';
 $string['unlimited'] = 'Unlimited';
 $string['user'] = 'User';

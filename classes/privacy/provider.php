@@ -24,8 +24,6 @@
 
 namespace block_quiz_assistant\privacy;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * The block stores no personal data.
  */
