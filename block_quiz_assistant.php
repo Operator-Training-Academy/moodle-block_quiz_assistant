@@ -158,101 +158,148 @@ class block_quiz_assistant extends block_base {
             $overridesbyquiz[$override->quiz][] = $override;
         }
 
-        foreach ($quizzes as $quiz) {
-            try {
-                $modulecontext = context_module::instance($quiz->coursemodule);
-                $summary = html_writer::tag(
-                    'h4',
-                    html_writer::link(
-                        new moodle_url('/mod/quiz/view.php', ['id' => $quiz->coursemodule]),
-                        format_string($quiz->name, true, ['context' => $modulecontext]),
-                    ),
-                    ['class' => 'h5'],
-                );
+            foreach ($quizzes as $quiz) {
+                try {
+                    $modulecontext = context_module::instance($quiz->coursemodule);
+                    $summary = html_writer::tag(
+                        'h4',
+                        html_writer::link(
+                            new moodle_url('/mod/quiz/view.php', ['id' => $quiz->coursemodule]),
+                            format_string($quiz->name, true, ['context' => $modulecontext]),
+                        ),
+                        ['class' => 'h5'],
+                    );
 
-                $summary .= format_module_intro('quiz', $quiz, $quiz->coursemodule, false);
+                    $summary .= format_module_intro('quiz', $quiz, $quiz->coursemodule, false);
 
-                $timelimit = $quiz->timelimit ? format_time($quiz->timelimit) :
-                    get_string('notimelimit', 'block_quiz_assistant');
-                $attempts = $quiz->attempts ?: get_string('unlimited', 'block_quiz_assistant');
-                $gradepass = get_string('notset', 'block_quiz_assistant');
-                if (!empty($gradepasses[$quiz->id]->gradepass)) {
-                    $gradepass = format_float($gradepasses[$quiz->id]->gradepass, 2);
-                }
-                $questions = $questioncounts[$quiz->id] ?? 0;
+                    $timelimit = $quiz->timelimit ? format_time($quiz->timelimit) :
+                        get_string('notimelimit', 'block_quiz_assistant');
+                    $attempts = $quiz->attempts ?: get_string('unlimited', 'block_quiz_assistant');
+                    $gradepass = get_string('notset', 'block_quiz_assistant');
+                    if (!empty($gradepasses[$quiz->id]->gradepass)) {
+                        $gradepass = format_float($gradepasses[$quiz->id]->gradepass, 2);
+                    }
+                    $questions = $questioncounts[$quiz->id] ?? 0;
 
-                $details = [
-                    get_string('timelimit', 'block_quiz_assistant') => $timelimit,
-                    get_string('attempts', 'block_quiz_assistant') => $attempts,
-                    get_string('gradepass', 'block_quiz_assistant') => $gradepass,
-                    get_string('questions', 'block_quiz_assistant') => $questions,
-                ];
-                if ($quiz->password !== '') {
-                    $details[get_string('defaultpassword', 'block_quiz_assistant')] =
-                        html_writer::tag('code', s($quiz->password));
-                }
+                    $details = [
+                        get_string('timelimit', 'block_quiz_assistant') => $timelimit,
+                        get_string('attempts', 'block_quiz_assistant') => $attempts,
+                        get_string('gradepass', 'block_quiz_assistant') => $gradepass,
+                        get_string('questions', 'block_quiz_assistant') => $questions,
+                    ];
 
-                $detailhtml = '';
-                foreach ($details as $label => $value) {
-                    $detailhtml .= html_writer::tag('dt', s($label));
-                    $detailhtml .= html_writer::tag('dd', $value);
-                }
-                $summary .= html_writer::tag('dl', $detailhtml, ['class' => 'mb-2']);
+                    $detailhtml = '';
+                    foreach ($details as $label => $value) {
+                        $detailhtml .= html_writer::tag('dt', s($label));
+                        $detailhtml .= html_writer::tag('dd', $value);
+                    }
+                    $summary .= html_writer::tag('dl', $detailhtml, ['class' => 'mb-2']);
 
-                if (!empty($overridesbyquiz[$quiz->id])) {
-                    $overrideitems = '';
-                    foreach ($overridesbyquiz[$quiz->id] as $override) {
-                        if ($override->groupid) {
-                            $target = get_string('group', 'block_quiz_assistant') . ': ' .
-                                format_string($override->groupname);
-                        } else {
-                            $target = get_string('user', 'block_quiz_assistant') . ': ' . fullname($override);
+                    if ($quiz->password !== '') {
+                        $summary .= html_writer::tag('strong', get_string('defaultpassword', 'block_quiz_assistant'));
+                        $summary .= $this->render_password_input('quiz_pass_' . $quiz->id, $quiz->password);
+                    }
+
+                    if (!empty($overridesbyquiz[$quiz->id])) {
+                        $summary .= html_writer::tag('strong', get_string('overrides', 'block_quiz_assistant'));
+                        $overrideitems = '';
+                        foreach ($overridesbyquiz[$quiz->id] as $idx => $override) {
+                            if ($override->groupid) {
+                                $target = get_string('group', 'block_quiz_assistant') . ': ' .
+                                    format_string($override->groupname);
+                            } else {
+                                $target = get_string('user', 'block_quiz_assistant') . ': ' . fullname($override);
+                            }
+                            $inputhtml = $this->render_password_input(
+                                'override_pass_' . $quiz->id . '_' . $idx,
+                                $override->password,
+                            );
+                            $overrideitems .= html_writer::tag(
+                                'li',
+                                html_writer::tag('div', s($target), ['class' => 'small text-muted mb-1']) . $inputhtml,
+                                ['class' => 'mb-2'],
+                            );
                         }
-                        $overrideitems .= html_writer::tag(
-                            'li',
-                            s($target) . ': ' . html_writer::tag('code', s($override->password)),
+                        $summary .= html_writer::tag('ul', $overrideitems, ['class' => 'list-unstyled mb-2']);
+                    }
+
+                    if (class_exists('mod_quiz\quiz_settings')) {
+                        $quizsettings = quiz_settings::create($quiz->id);
+                        $accessrules = $quizsettings->get_access_manager(time())->describe_rules();
+                        if ($accessrules) {
+                            $filteredrules = [];
+                            foreach ($accessrules as $rule) {
+                                $ruletext = strip_tags($rule);
+                                if (preg_match('/(time limit|attempts allowed|need to know the quiz password|password)/i', $ruletext)) {
+                                    continue;
+                                }
+                                $filteredrules[] = $rule;
+                            }
+                            if (!empty($filteredrules)) {
+                                $ruleitems = '';
+                                foreach ($filteredrules as $rule) {
+                                    $ruleitems .= html_writer::tag('li', $rule);
+                                }
+                                $summary .= html_writer::tag('strong', get_string('testinfo', 'block_quiz_assistant'));
+                                $summary .= html_writer::tag('ul', $ruleitems, ['class' => 'mb-2']);
+                            }
+                        }
+                    }
+
+                    if (has_capability('mod/quiz:viewreports', $modulecontext)) {
+                        $summary .= html_writer::link(
+                            new moodle_url('/mod/quiz/report.php', ['id' => $quiz->coursemodule]),
+                            get_string('viewresults', 'block_quiz_assistant'),
+                            ['class' => 'btn btn-secondary btn-sm'],
                         );
                     }
-                    $summary .= html_writer::tag('strong', get_string('overrides', 'block_quiz_assistant'));
-                    $summary .= html_writer::tag('ul', $overrideitems, ['class' => 'mb-2']);
-                }
 
-                if (class_exists('mod_quiz\quiz_settings')) {
-                    $quizsettings = quiz_settings::create($quiz->id);
-                    $accessrules = $quizsettings->get_access_manager(time())->describe_rules();
-                    if ($accessrules) {
-                        $ruleitems = '';
-                        foreach ($accessrules as $rule) {
-                            $ruleitems .= html_writer::tag('li', $rule);
-                        }
-                        $summary .= html_writer::tag('strong', get_string('accessrules', 'block_quiz_assistant'));
-                        $summary .= html_writer::tag('ul', $ruleitems, ['class' => 'mb-2']);
+                    $this->content->text .= html_writer::div($summary, 'mb-4');
+                } catch (\Throwable $e) {
+                    if ($this->page->user_is_editing()) {
+                        $this->content->text .= html_writer::div(
+                            s($e->getMessage()),
+                            'alert alert-danger mb-2',
+                        );
                     }
                 }
-
-                if (has_capability('mod/quiz:viewreports', $modulecontext)) {
-                    $summary .= html_writer::link(
-                        new moodle_url('/mod/quiz/report.php', ['id' => $quiz->coursemodule]),
-                        get_string('viewresults', 'block_quiz_assistant'),
-                        ['class' => 'btn btn-secondary btn-sm'],
-                    );
-                }
-
-                $this->content->text .= html_writer::div($summary, 'mb-4');
-            } catch (\Throwable $e) {
-                if ($this->page->user_is_editing()) {
-                    $this->content->text .= html_writer::div(
-                        s($e->getMessage()),
-                        'alert alert-danger mb-2',
-                    );
-                }
             }
-        }
 
         if (empty($this->content->text)) {
             $this->content->text = html_writer::div(get_string('noquizzes', 'block_quiz_assistant'));
         }
 
         return $this->content;
+    }
+
+    /**
+     * Render a password input box with a show/hide toggle button.
+     *
+     * @param string $id Unique element ID suffix.
+     * @param string $password Password string.
+     * @return string HTML output.
+     */
+    protected function render_password_input(string $id, string $password): string {
+        $showstr = get_string('showpassword', 'block_quiz_assistant');
+        $hidestr = get_string('hidepassword', 'block_quiz_assistant');
+
+        $input = html_writer::empty_tag('input', [
+            'type' => 'password',
+            'id' => $id,
+            'class' => 'form-control font-monospace',
+            'value' => $password,
+            'readonly' => 'readonly',
+            'aria-label' => get_string('password', 'block_quiz_assistant'),
+        ]);
+
+        $button = html_writer::tag('button', s($showstr), [
+            'type' => 'button',
+            'class' => 'btn btn-outline-secondary',
+            'onclick' => "var input=document.getElementById('" . s($id) . "');" .
+                "if(input.type==='password'){input.type='text';this.innerText='" . s($hidestr) . "';}" .
+                "else{input.type='password';this.innerText='" . s($showstr) . "';}",
+        ]);
+
+        return html_writer::div($input . $button, 'input-group mb-2');
     }
 }

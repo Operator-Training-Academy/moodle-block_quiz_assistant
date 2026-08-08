@@ -22,11 +22,12 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['accessrules'] = 'Additional access rules';
+$string['accessrules'] = 'Test info';
 $string['attempts'] = 'Attempts allowed';
 $string['defaultpassword'] = 'Quiz password';
 $string['gradepass'] = 'Grade required to pass';
 $string['group'] = 'Group';
+$string['hidepassword'] = 'Hide';
 $string['nopermission'] = 'You do not have permission to view Quiz assistant details in this course.';
 $string['noquizzes'] = 'There are no quizzes in this course.';
 $string['notimelimit'] = 'No time limit';
@@ -40,6 +41,8 @@ $string['questions'] = 'Questions';
 $string['quiz_assistant:addinstance'] = 'Add a Quiz assistant block';
 $string['quiz_assistant:edit'] = 'Edit a Quiz assistant block';
 $string['quiz_assistant:view'] = 'View quiz assistant information';
+$string['showpassword'] = 'Show';
+$string['testinfo'] = 'Test info';
 $string['timelimit'] = 'Time limit';
 $string['unlimited'] = 'Unlimited';
 $string['user'] = 'User';
