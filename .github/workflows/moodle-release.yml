@@ -1,3 +1,6 @@
+# Copyright 2026 Operator Training Academy
+# Licensed under the GNU General Public License v3.0 or later.
+
 name: Package Moodle Plugin Release
 
 on:

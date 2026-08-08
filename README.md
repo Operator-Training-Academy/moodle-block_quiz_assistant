@@ -2,6 +2,10 @@
 
 `block_quiz_assistant` gives authorised course staff a concise summary of every quiz in the current course.
 
+Source code: <https://github.com/Operator-Training-Academy/moodle-block_quiz_assistant>
+
+Support and bug reports: <https://github.com/Operator-Training-Academy/moodle-block_quiz_assistant/issues>
+
 ## Preview
 
 ![Quiz assistant block preview](docs/quiz-assistant-block-preview.svg)
@@ -13,14 +17,12 @@
 
 ## Installation
 
-Install this repository as `blocks/quiz_assistant` in the Moodle code directory, then run:
+Install the ZIP package through Moodle's standard plugin installer, or install this repository as `blocks/quiz_assistant` in the Moodle code directory and then run:
 
 ```sh
 php admin/cli/upgrade.php --non-interactive
 php admin/cli/purge_caches.php
 ```
-
-For the OTA Moodle stack, the Moodle code directory is the host-mounted `moodle/` directory. Install the plugin at `moodle/blocks/quiz_assistant` and run the commands through the `moodle_app` container.
 
 ## Capabilities
 
@@ -45,6 +47,10 @@ For every quiz in the course, the block displays:
 - A **View results** link for users with permission to view that quiz's reports.
 
 The block does not render its quiz information for users without `block/quiz_assistant:view`.
+
+## Documentation
+
+This README is the plugin documentation. It covers installation, capabilities, displayed information, and verification.
 
 ## License
 
