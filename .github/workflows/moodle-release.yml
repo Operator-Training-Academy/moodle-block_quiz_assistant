@@ -1,0 +1,49 @@
+name: Package Moodle Plugin Release
+
+on:
+  release:
+    types:
+      - published
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    if: startsWith(github.event.release.tag_name, 'v')
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Check out the release tag
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.release.tag_name }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Determine plugin version
+        id: version
+        run: |
+          # shellcheck disable=SC2016
+          VERSION="$(php -r 'define("MOODLE_INTERNAL", true); define("MATURITY_ALPHA", 50); $plugin = new stdClass(); require "version.php"; echo $plugin->version;')"
+          if [[ ! "$VERSION" =~ ^[0-9]+$ ]]; then
+            echo "version.php did not provide a numeric plugin version."
+            exit 1
+          fi
+          echo "value=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Create Moodle plugin archive
+        id: archive
+        run: |
+          FILENAME="moodle-block_quiz_assistant-${{ steps.version.outputs.value }}.zip"
+          git archive --format=zip --prefix=quiz_assistant/ "${{ github.event.release.tag_name }}" -o "$FILENAME"
+          echo "path=$FILENAME" >> "$GITHUB_OUTPUT"
+
+      - name: Upload release asset
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "${{ github.event.release.tag_name }}" "${{ steps.archive.outputs.path }}" --clobber
+
+      # Moodle.org publishing is temporarily unavailable. Do not enable this until
+      # local_plugins_add_version is available again and MOODLE_ORG_TOKEN is configured.
+      # The required Frankenstyle component name is block_quiz_assistant.

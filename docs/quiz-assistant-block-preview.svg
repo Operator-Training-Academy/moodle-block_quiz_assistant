@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="660" viewBox="0 0 760 660" role="img" aria-labelledby="title description">
+  <title id="title">Quiz assistant block preview</title>
+  <desc id="description">A Moodle course block showing quiz instructions, settings, passwords, overrides, and a results link.</desc>
+  <style>
+    .page { fill: #f5f7f9; }
+    .block { fill: #ffffff; stroke: #cbd5e1; stroke-width: 1; }
+    .header { fill: #0f6cbf; }
+    .title { fill: #ffffff; font: 700 19px Arial, sans-serif; }
+    .quiz { fill: #123; font: 700 17px Arial, sans-serif; }
+    .body { fill: #334155; font: 14px Arial, sans-serif; }
+    .label { fill: #475569; font: 700 13px Arial, sans-serif; }
+    .value { fill: #1e293b; font: 14px Arial, sans-serif; }
+    .muted { fill: #64748b; font: 13px Arial, sans-serif; }
+    .divider { stroke: #e2e8f0; stroke-width: 1; }
+    .badge { fill: #e8f3fc; }
+    .badge-text { fill: #075a9c; font: 700 12px Arial, sans-serif; }
+    .password { fill: #fff7df; stroke: #f1d28a; stroke-width: 1; }
+    .password-text { fill: #6b4e00; font: 700 13px monospace; }
+    .button { fill: #0f6cbf; }
+    .button-text { fill: #ffffff; font: 700 13px Arial, sans-serif; }
+  </style>
+  <rect class="page" width="760" height="660" rx="12"/>
+  <rect class="block" x="34" y="28" width="692" height="604" rx="8"/>
+  <path class="header" d="M42 28h676a8 8 0 0 1 8 8v48H34V36a8 8 0 0 1 8-8z"/>
+  <text class="title" x="58" y="61">Quiz assistant</text>
+  <text class="quiz" x="58" y="119">Annual safety assessment</text>
+  <text class="body" x="58" y="145">Read the assessment instructions before distributing the password.</text>
+  <text class="body" x="58" y="166">You may use a calculator. Complete all questions before submitting.</text>
+  <rect class="badge" x="58" y="190" width="103" height="26" rx="13"/>
+  <text class="badge-text" x="73" y="207">20 questions</text>
+  <rect class="badge" x="172" y="190" width="109" height="26" rx="13"/>
+  <text class="badge-text" x="188" y="207">45 minutes</text>
+  <rect class="badge" x="292" y="190" width="113" height="26" rx="13"/>
+  <text class="badge-text" x="307" y="207">2 attempts</text>
+  <line class="divider" x1="58" y1="238" x2="702" y2="238"/>
+  <text class="label" x="58" y="267">Grade required to pass</text>
+  <text class="value" x="310" y="267">80.00</text>
+  <text class="label" x="58" y="298">Quiz password</text>
+  <rect class="password" x="310" y="277" width="134" height="31" rx="4"/>
+  <text class="password-text" x="324" y="298">Safety-2026</text>
+  <line class="divider" x1="58" y1="330" x2="702" y2="330"/>
+  <text class="label" x="58" y="359">Password overrides</text>
+  <text class="muted" x="58" y="383">Group: Night shift</text>
+  <rect class="password" x="310" y="362" width="127" height="31" rx="4"/>
+  <text class="password-text" x="324" y="383">Night-2026</text>
+  <line class="divider" x1="58" y1="405" x2="702" y2="405"/>
+  <text class="label" x="58" y="434">Additional access rules</text>
+  <text class="body" x="58" y="458">Further attempts are blocked once the grade to pass is reached.</text>
+  <rect class="button" x="58" y="491" width="117" height="36" rx="4"/>
+  <text class="button-text" x="75" y="514">View results</text>
+  <text class="muted" x="58" y="578">Visible only to users with the Quiz assistant view capability.</text>
+</svg>
