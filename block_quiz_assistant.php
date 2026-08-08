@@ -188,13 +188,6 @@ class block_quiz_assistant extends block_base {
                     get_string('questions', 'block_quiz_assistant') => $questions,
                 ];
 
-                $detailhtml = '';
-                foreach ($details as $label => $value) {
-                    $detailhtml .= html_writer::tag('dt', s($label));
-                    $detailhtml .= html_writer::tag('dd', $value);
-                }
-                $summary .= html_writer::tag('dl', $detailhtml, ['class' => 'mb-2']);
-
                 if ($quiz->password !== '') {
                     $summary .= html_writer::tag('strong', get_string('defaultpassword', 'block_quiz_assistant'));
                     $summary .= $this->render_password_input('quiz_pass_' . $quiz->id, $quiz->password);
@@ -223,6 +216,15 @@ class block_quiz_assistant extends block_base {
                     $summary .= html_writer::tag('ul', $overrideitems, ['class' => 'list-unstyled mb-2']);
                 }
 
+                $summary .= html_writer::tag('strong', get_string('testinfo', 'block_quiz_assistant'));
+
+                $detailhtml = '';
+                foreach ($details as $label => $value) {
+                    $detailhtml .= html_writer::tag('dt', s($label));
+                    $detailhtml .= html_writer::tag('dd', $value);
+                }
+                $summary .= html_writer::tag('dl', $detailhtml, ['class' => 'mb-2']);
+
                 if (class_exists('mod_quiz\quiz_settings')) {
                     $quizsettings = quiz_settings::create($quiz->id);
                     $accessrules = $quizsettings->get_access_manager(time())->describe_rules();
@@ -240,7 +242,6 @@ class block_quiz_assistant extends block_base {
                             foreach ($filteredrules as $rule) {
                                 $ruleitems .= html_writer::tag('li', $rule);
                             }
-                            $summary .= html_writer::tag('strong', get_string('testinfo', 'block_quiz_assistant'));
                             $summary .= html_writer::tag('ul', $ruleitems, ['class' => 'mb-2']);
                         }
                     }

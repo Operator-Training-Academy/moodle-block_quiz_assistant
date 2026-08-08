@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'block_quiz_assistant';
-$plugin->version = 2026080805;
+$plugin->version = 2026080806;
 $plugin->requires = 2025041400;
 $plugin->maturity = MATURITY_ALPHA;
-$plugin->release = '0.1.5';
+$plugin->release = '0.1.6';
