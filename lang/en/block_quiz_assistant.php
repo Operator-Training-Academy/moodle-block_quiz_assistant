@@ -22,7 +22,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['pluginname'] = 'Quiz assistant';
 $string['accessrules'] = 'Additional access rules';
 $string['attempts'] = 'Attempts allowed';
 $string['defaultpassword'] = 'Quiz password';
@@ -33,6 +32,7 @@ $string['notimelimit'] = 'No time limit';
 $string['notset'] = 'Not set';
 $string['overrides'] = 'Password overrides';
 $string['password'] = 'Password';
+$string['pluginname'] = 'Quiz assistant';
 $string['privacy:metadata'] = 'The Quiz assistant block does not store any personal data.';
 $string['questions'] = 'Questions';
 $string['quiz_assistant:addinstance'] = 'Add a Quiz assistant block';
