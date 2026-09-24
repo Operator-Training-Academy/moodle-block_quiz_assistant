@@ -46,6 +46,10 @@ For every quiz in the course, the block displays:
 - Descriptions from active Moodle quiz access-rule plugins. This includes `quizaccess_failgrade` when it is enabled.
 - A **View results** link for users with permission to view that quiz's reports.
 
+## Mobile Support
+
+The Moodle App displays **Quiz Assistant** in the course **More** menu for users with the `block/quiz_assistant:view` capability. It provides the quiz link, passwords, password overrides, and test information in a mobile-native layout.
+
 The block does not render its quiz information for users without `block/quiz_assistant:view`.
 
 ## Documentation
@@ -64,3 +68,5 @@ This plugin is licensed under the GNU General Public License v3.0 or later. See 
 4. Confirm teachers can see details and the results link.
 5. Confirm editing teachers can add and edit the block.
 6. Confirm students and roles without `block/quiz_assistant:view` cannot see the quiz details.
+7. In the Moodle App, open the course **More** menu and confirm Quiz Assistant shows the same quiz details without horizontal scrolling.
+8. Switch to a non-English language pack and confirm the separately displayed time limit, attempts, and password rules do not appear again in the access-rule list.
