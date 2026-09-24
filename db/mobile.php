@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Plugin metadata for the Quiz assistant block.
+ * Moodle App integration for Quiz assistant.
  *
  * @package    block_quiz_assistant
  * @copyright  2026 Operator Training Academy
@@ -24,8 +24,21 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'block_quiz_assistant';
-$plugin->version = 2026092400;
-$plugin->requires = 2025041400;
-$plugin->maturity = MATURITY_ALPHA;
-$plugin->release = '0.1.8';
+$addons = [
+    'block_quiz_assistant' => [
+        'handlers' => [
+            'courseoption' => [
+                'delegate' => 'CoreCourseOptionsDelegate',
+                'method' => 'mobile_course_view',
+                'ismenuhandler' => true,
+                'displaydata' => [
+                    'title' => 'pluginname',
+                    'icon' => 'list',
+                ],
+            ],
+        ],
+        'lang' => [
+            ['pluginname', 'block_quiz_assistant'],
+        ],
+    ],
+];

@@ -1,0 +1,69 @@
+{{!
+    @template block_quiz_assistant/mobile
+
+    Moodle App remote add-on template for the course More menu.
+
+    Example context (json):
+    {
+        "quizzes": [
+            {
+                "name": "Safety assessment",
+                "url": "https://moodle.example.test/mod/quiz/view.php?id=42",
+                "intro": "<p>Complete this assessment before operating equipment.</p>",
+                "password": "test-password",
+                "passwordlabel": "Quiz password",
+                "overrides": [
+                    {
+                        "target": "Group: Trainers",
+                        "password": "group-password"
+                    }
+                ],
+                "details": [
+                    {
+                        "label": "Time limit",
+                        "value": "30 mins"
+                    }
+                ]
+            }
+        ],
+        "noquizzes": "There are no quizzes in this course."
+    }
+}}
+<ion-list>
+    {{#quizzes}}
+    <ion-item-divider>{{name}}</ion-item-divider>
+    <ion-item button core-link href="{{url}}" capture="true">
+        <ion-label>{{name}}</ion-label>
+    </ion-item>
+    {{#intro}}
+    <ion-item lines="none">
+        <ion-label class="ion-text-wrap">{{{intro}}}</ion-label>
+    </ion-item>
+    {{/intro}}
+    {{#password}}
+    <ion-item>
+        <ion-label>
+            <p>{{passwordlabel}}</p>
+            <h2>{{password}}</h2>
+        </ion-label>
+    </ion-item>
+    {{/password}}
+    {{#overrides}}
+    <ion-item>
+        <ion-label>
+            <p>{{target}}</p>
+            <h2>{{password}}</h2>
+        </ion-label>
+    </ion-item>
+    {{/overrides}}
+    {{#details}}
+    <ion-item>
+        <ion-label>{{label}}</ion-label>
+        <ion-note slot="end">{{value}}</ion-note>
+    </ion-item>
+    {{/details}}
+    {{/quizzes}}
+    {{^quizzes}}
+    <ion-item><ion-label>{{noquizzes}}</ion-label></ion-item>
+    {{/quizzes}}
+</ion-list>

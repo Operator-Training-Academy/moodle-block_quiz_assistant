@@ -229,10 +229,28 @@ class block_quiz_assistant extends block_base {
                     $quizsettings = quiz_settings::create($quiz->id);
                     $accessrules = $quizsettings->get_access_manager(time())->describe_rules();
                     if ($accessrules) {
+                        // These rules are rendered separately above. Use the rule components' localised strings.
+                        $skippedrules = [];
+                        if ($quiz->timelimit) {
+                            $skippedrules[] = get_string(
+                                'quiztimelimit',
+                                'quizaccess_timelimit',
+                                format_time($quiz->timelimit),
+                            );
+                        }
+                        if ($quiz->attempts) {
+                            $skippedrules[] = get_string(
+                                'attemptsallowedn',
+                                'quizaccess_numattempts',
+                                $quiz->attempts,
+                            );
+                        }
+                        if ($quiz->password !== '') {
+                            $skippedrules[] = get_string('requirepasswordmessage', 'quizaccess_password');
+                        }
                         $filteredrules = [];
-                        $skipregex = '/(time limit|attempts allowed|need to know the quiz password|password)/i';
                         foreach ($accessrules as $rule) {
-                            if (preg_match($skipregex, strip_tags($rule))) {
+                            if (in_array(trim(strip_tags($rule)), $skippedrules, true)) {
                                 continue;
                             }
                             $filteredrules[] = $rule;
@@ -255,7 +273,7 @@ class block_quiz_assistant extends block_base {
                     );
                 }
 
-                $this->content->text .= html_writer::div($summary, 'mb-4');
+                $this->content->text .= html_writer::div($summary, 'block_quiz_assistant-quiz mb-4');
             } catch (\Throwable $e) {
                 if ($this->page->user_is_editing()) {
                     $this->content->text .= html_writer::div(
@@ -288,7 +306,7 @@ class block_quiz_assistant extends block_base {
             'type' => 'password',
             'id' => $id,
             'class' => 'form-control form-control-sm font-monospace',
-            'style' => 'max-width: 180px; user-select: none; -webkit-user-select: none;',
+            'style' => 'min-width: 0; user-select: none; -webkit-user-select: none;',
             'value' => $password,
             'readonly' => 'readonly',
             'oncopy' => 'return false;',
